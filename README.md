@@ -7,7 +7,7 @@ In the previous lesson, we learned the mathematical definition of a gradient.  W
 
 Think about why gradient descent applies so well to a cost function.  Initially, we said that the cost of our function, meaning the difference between what our regression line predicted and the dataset, changed as we altered the y-intercept or the slope of the function.
 
-Remember that mathematically, when we say cost function, we use the residual sum of squares where $$ RSS = \sum_{i=1}^n(actual - expected)^2 = \sum_{i=1}^n(y_i - \overline{y})^2 = \sum_{i=1}^n(y_i - mx_i + b)^2$$ for all $x$ and $y$ values of our dataset.  So in the graph directly below, $x_i$ and $y_i$  would be our points representing a movie's budget and revenue.  Meanwhile, $mx_i + b $ is our predicted $y$ value for a given $x$ value, of a budget.
+Remember that mathematically, when we say cost function, we use the residual sum of squares where $$ RSS = \sum_{i=1}^n(actual - expected)^2 = \sum_{i=1}^n(y_i - \hat{y})^2 = \sum_{i=1}^n(y_i - mx_i + b)^2$$ for all $x$ and $y$ values of our dataset.  So in the graph directly below, $x_i$ and $y_i$  would be our points representing a movie's budget and revenue.  Meanwhile, $mx_i + b $ is our predicted $y$ value for a given $x$ value, of a budget.
 
 And RSS takes the difference between $mx_i + b$, the $y_i$ value our regression line predicts, and our actual $y$, represented by the length of the red lines.  Then we square this difference, and sum up these squares for each piece of data in our dataset.  That is the residual sum of squares.
 
@@ -23,7 +23,7 @@ from graph import m_b_trace, trace_values, plot
 init_notebook_mode(connected=True)
 b_values = list(range(70, 150, 10))
 rss = [10852, 9690, 9128, 9166, 9804, 11042, 12880, 15318]
-cost_curve_trace = trace_values(b_values, rss, mode="line", name = 'RSS with changes to y-intercept')
+cost_curve_trace = trace_values(b_values, rss, mode="lines", name = 'RSS with changes to y-intercept')
 plot([cost_curve_trace])
 ```
 
@@ -36,7 +36,7 @@ plot([cost_curve_trace])
 
 
 
-<div id="8180eb52-f077-432f-94c4-0c0c08f25f9d" style="height: 525px; width: 100%;" class="plotly-graph-div"></div><script type="text/javascript">require(["plotly"], function(Plotly) { window.PLOTLYENV=window.PLOTLYENV || {};window.PLOTLYENV.BASE_URL="https://plot.ly";Plotly.newPlot("8180eb52-f077-432f-94c4-0c0c08f25f9d", [{"x": [70, 80, 90, 100, 110, 120, 130, 140], "y": [10852, 9690, 9128, 9166, 9804, 11042, 12880, 15318], "mode": "line", "name": "RSS with changes to y-intercept", "text": []}], {}, {"showLink": true, "linkText": "Export to plot.ly"})});</script>
+<div id="8180eb52-f077-432f-94c4-0c0c08f25f9d" style="height: 525px; width: 100%;" class="plotly-graph-div"></div><script type="text/javascript">require(["plotly"], function(Plotly) { window.PLOTLYENV=window.PLOTLYENV || {};window.PLOTLYENV.BASE_URL="https://plot.ly";Plotly.newPlot("8180eb52-f077-432f-94c4-0c0c08f25f9d", [{"x": [70, 80, 90, 100, 110, 120, 130, 140], "y": [10852, 9690, 9128, 9166, 9804, 11042, 12880, 15318], "mode": "lines", "name": "RSS with changes to y-intercept", "text": []}], {}, {"showLink": true, "linkText": "Export to plot.ly"})});</script>
 
 
 In two dimensions, we decrease our RSS simply by moving forwards or backwards along the cost curve which is the equivalent of changing our variable, in this case y-intercept.  So the cost curve above indicates that changing the regression line from having a y-intercept of 70 to 80 decreases our cost, the RSS.
@@ -139,13 +139,13 @@ $$ \frac{dJ}{db}J(m,b) = -2*(y - (mx + b)) $$
 
 And as $mx + b$ = is just our regression line, we can simplify these formulas to be:
 
-$$ \frac{dJ}{dm}J(m,b) = -2*x(y - \overline{y})  = -2x*\epsilon$$
-$$ \frac{dJ}{db}J(m,b) = -2*(y - \overline{y}) = -2\epsilon$$
+$$ \frac{dJ}{dm}J(m,b) = -2*x(y - \hat{y})  = -2x*\epsilon$$
+$$ \frac{dJ}{db}J(m,b) = -2*(y - \hat{y}) = -2\epsilon$$
 
-Remember, `error` = `actual` - `expected`, so we can replace $y - \overline{y}$ with $\epsilon$, our error. As we mentioned above, our last step is adding back the summations.  Since $-2$ is a constant, we can keep this outside of the summation.  Our value for $x$ changes depending upon what x value we are at, so it must be included inside the summation for the first equation.  Below, we have:
+Remember, `error` = `actual` - `expected`, so we can replace $y - \hat{y}$ with $\epsilon$, our error. As we mentioned above, our last step is adding back the summations.  Since $-2$ is a constant, we can keep this outside of the summation.  Our value for $x$ changes depending upon what x value we are at, so it must be included inside the summation for the first equation.  Below, we have:
 
-$$ \frac{dJ}{dm}J(m,b) = -2*\sum_{i=1}^n x(y_i - \overline{y}_i)  = -2*\sum_{i=1}^n x_i*\epsilon_i$$
-$$ \frac{dJ}{db}J(m,b) = -2*\sum_{i=1}^n(y_i - \overline{y}_i) = -2*\sum_{i=1}^n \epsilon_i$$
+$$ \frac{dJ}{dm}J(m,b) = -2*\sum_{i=1}^n x(y_i - \hat{y}_i)  = -2*\sum_{i=1}^n x_i*\epsilon_i$$
+$$ \frac{dJ}{db}J(m,b) = -2*\sum_{i=1}^n(y_i - \hat{y}_i) = -2*\sum_{i=1}^n \epsilon_i$$
 
 So that is what what we'll do to find the "best fit regression line."  We'll start with an initial regression line with values of $m$ and $b$.  Then we'll go through our dataset, and we will use the above formulas with each point to tell us how to update our regression line such that it continues to minimize our cost function.
 
